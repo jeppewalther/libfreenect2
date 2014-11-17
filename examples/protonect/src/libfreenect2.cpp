@@ -631,6 +631,21 @@ Freenect2Device *Freenect2::openDevice(int idx)
   return openDevice(0, new DefaultPacketPipeline());
 }
 
+Freenect2Device *Freenect2::openDevice(int idx, PipelineTypes pipeline_type)
+{
+    switch (pipeline_type)
+    {
+        case PIPELINE_CPU:
+            return openDevice(idx, new CpuPacketPipeline);
+        case PIPELINE_OPENGL:
+            return openDevice(idx, new OpenGLPacketPipeline);
+#ifdef WITH_OPENCL_SUPPORT
+        case PIPELINE_OPENCL:
+            return openDevice(idx, new OpenGLPacketPipeline);
+#endif // WITH_OPENCL_SUPPORT
+    }
+}
+
 Freenect2Device *Freenect2::openDevice(int idx, const PacketPipeline *pipeline)
 {
   return openDevice(idx, pipeline, true);
@@ -748,5 +763,11 @@ Freenect2Device *Freenect2::openDefaultDevice(const PacketPipeline *pipeline)
 {
   return openDevice(0, pipeline);
 }
+
+Freenect2Device *Freenect2::openDefaultDevice(PipelineTypes pipeline_type)
+{
+ return openDevice(0, pipeline_type);
+}
+
 
 } /* namespace libfreenect2 */

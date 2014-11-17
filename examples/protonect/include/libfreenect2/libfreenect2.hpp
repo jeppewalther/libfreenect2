@@ -32,6 +32,13 @@
 namespace libfreenect2
 {
 
+enum PipelineTypes
+{
+    PIPELINE_CPU,
+    PIPELINE_OPENGL,
+    PIPELINE_OPENCL
+};
+
 class PacketPipeline;
 
 class Freenect2Device
@@ -40,6 +47,8 @@ public:
   static const unsigned int VendorId = 0x045E;
   static const unsigned int ProductId = 0x02D8;
   static const unsigned int ProductIdPreview = 0x02C4;
+
+
 
   struct ColorCameraParams
   {
@@ -66,6 +75,7 @@ public:
   virtual void start() = 0;
   virtual void stop() = 0;
   virtual void close() = 0;
+
 };
 
 class Freenect2Impl;
@@ -82,12 +92,14 @@ public:
   std::string getDefaultDeviceSerialNumber();
 
   Freenect2Device *openDevice(int idx);
+  Freenect2Device *openDevice(int idx, PipelineTypes pipeline_type);
   Freenect2Device *openDevice(int idx, const PacketPipeline *factory);
   Freenect2Device *openDevice(const std::string &serial);
   Freenect2Device *openDevice(const std::string &serial, const PacketPipeline *factory);
 
   Freenect2Device *openDefaultDevice();
   Freenect2Device *openDefaultDevice(const PacketPipeline *factory);
+  Freenect2Device *openDefaultDevice(PipelineTypes pipeline_type);
 protected:
   Freenect2Device *openDevice(int idx, const PacketPipeline *factory, bool attempting_reset);
 private:
